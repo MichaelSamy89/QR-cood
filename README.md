@@ -1,1 +1,1 @@
-# QRcood
+# QR cood
