@@ -115,13 +115,13 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbxPQj65-wjluoAxGRkL4w40
   }
 
   function initBridge() {
-  if (!API_URL || API_URL.includes('ضع_هنا')) {
+  if (!API_URL || API_URL.includes('https://script.google.com/macros/s/AKfycbxPQj65-wjluoAxGRkL4w40Uw0fKt_5fJWMTo5MrisBUwhfh-44yNk9dnkaoQcO6meP/exec')) {
     throw new Error('رابط Apps Script غير موجود داخل API_URL');
   }
 
   let frame = document.getElementById('bridgeFrame');
 
-  // لو العنصر غير موجود، أنشئه تلقائيًا
+  // لو العنصر غير موجود، أنشئه بنفسك
   if (!frame) {
     frame = document.createElement('iframe');
 
@@ -366,8 +366,18 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbxPQj65-wjluoAxGRkL4w40
     if (e.key === 'Enter') login();
   });
 
-  initBridge();
-</script>
-<iframe id="bridgeFrame" title="bridge" style="display:none"></iframe>
-</body>
-</html>
+  window.addEventListener('DOMContentLoaded', () => {
+  try {
+    initBridge();
+  } catch (err) {
+    console.error(err);
+
+    const status = document.getElementById('loginStatus');
+
+    if (status) {
+      status.textContent = err.message;
+      status.className = 'status err';
+      status.classList.remove('hidden');
+    }
+  }
+});
