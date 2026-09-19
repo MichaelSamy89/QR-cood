@@ -98,7 +98,7 @@
    * مهم جدًا:
    * بعد نشر Apps Script كـ Web App، ضع رابط /exec هنا.
    * مثال:
-   * const API_URL = 'https://script.google.com/macros/s/AKfycbxPQj65-wjluoAxGRkL4w40Uw0fKt_5fJWMTo5MrisBUwhfh-44yNk9dnkaoQcO6meP/exec';
+   * const API_URL = 'https://script.google.com/macros/s/XXXXXXXX/exec';
    ************************************************************/
   const API_URL = 'https://script.google.com/macros/s/AKfycbxPQj65-wjluoAxGRkL4w40Uw0fKt_5fJWMTo5MrisBUwhfh-44yNk9dnkaoQcO6meP/exec';
   let pending = [];
@@ -151,7 +151,7 @@
   });
 
   function initBridge() {
-    if (!API_URL || API_URL.includes('https://script.google.com/macros/s/AKfycbxPQj65-wjluoAxGRkL4w40Uw0fKt_5fJWMTo5MrisBUwhfh-44yNk9dnkaoQcO6meP/exec')) {
+    if (!API_URL || API_URL.includes('ضع_هنا_رابط')) {
       setStatus($('loginStatus'), 'ضع رابط Apps Script /exec داخل API_URL في index.html.', 'err');
       $('loginStatus').classList.remove('hidden');
       return;
