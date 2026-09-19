@@ -91,6 +91,8 @@
   </div>
 </div>
 
+
+<iframe id="bridgeFrame" title="Google Apps Script Bridge" style="display:none"></iframe>
 <script>
   /************************************************************
    * مهم جدًا:
@@ -98,7 +100,7 @@
    * مثال:
    * const API_URL = 'https://script.google.com/macros/s/XXXXXXXX/exec';
    ************************************************************/
-const API_URL = 'https://script.google.com/macros/s/AKfycbxPQj65-wjluoAxGRkL4w40Uw0fKt_5fJWMTo5MrisBUwhfh-44yNk9dnkaoQcO6meP/exec';
+  const API_URL = 'ضع_هنا_رابط_Web_App_الخاص_بـ_Apps_Script';
   let pending = [];
   let bridgeReady = false;
 
@@ -114,35 +116,22 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbxPQj65-wjluoAxGRkL4w40
     el.className = 'status ' + cls;
   }
 
-  function initBridge() {
-  if (!API_URL || API_URL.includes('https://script.google.com/macros/s/AKfycbxPQj65-wjluoAxGRkL4w40Uw0fKt_5fJWMTo5MrisBUwhfh-44yNk9dnkaoQcO6meP/exec')) {
-    throw new Error('رابط Apps Script غير موجود داخل API_URL');
+  function bridgeRequest(method, args = {}) {
+    return new Promise((resolve, reject) => {
+      const item = {resolve, reject};
+      pending.push(item);
+      if (!bridgeReady) {
+        reject(new Error('جاري الاتصال بخادم النظام...'));
+        pending = pending.filter(x => x !== item);
+        return;
+      }
+      document.getElementById('bridgeFrame').contentWindow.postMessage({
+        source: 'QR_ATTENDANCE_CLIENT',
+        method: method,
+        args: args
+      }, '*');
+    });
   }
-
-  let frame = document.getElementById('bridgeFrame');
-
-  // لو العنصر غير موجود، أنشئه بنفسك
-  if (!frame) {
-    frame = document.createElement('iframe');
-
-    frame.id = 'bridgeFrame';
-    frame.title = 'Google Apps Script Bridge';
-
-    frame.style.position = 'absolute';
-    frame.style.width = '1px';
-    frame.style.height = '1px';
-    frame.style.left = '-9999px';
-    frame.style.top = '-9999px';
-    frame.style.border = '0';
-    frame.style.visibility = 'hidden';
-
-    document.body.appendChild(frame);
-  }
-
-  frame.src = API_URL + '?bridge=1';
-
-  return frame;
-}
 
   window.addEventListener('message', event => {
     const msg = event.data || {};
@@ -167,7 +156,13 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbxPQj65-wjluoAxGRkL4w40
       $('loginStatus').classList.remove('hidden');
       return;
     }
-    document.getElementById('bridgeFrame').src = API_URL + '?bridge=1';
+
+    const frame = $('bridgeFrame');
+    if (!frame) {
+      throw new Error('عنصر bridgeFrame غير موجود في الصفحة.');
+    }
+
+    frame.src = API_URL + '?bridge=1&v=' + Date.now();
   }
 
   async function loadConfig() {
@@ -366,18 +361,9 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbxPQj65-wjluoAxGRkL4w40
     if (e.key === 'Enter') login();
   });
 
-  window.addEventListener('DOMContentLoaded', () => {
-  try {
-    initBridge();
-  } catch (err) {
-    console.error(err);
-
-    const status = document.getElementById('loginStatus');
-
-    if (status) {
-      status.textContent = err.message;
-      status.className = 'status err';
-      status.classList.remove('hidden');
-    }
-  }
-});
+  window.addEventListener('DOMContentLoaded', function() {
+    try { initBridge(); } catch (err) { console.error(err); }
+  });
+</script>
+</body>
+</html>
