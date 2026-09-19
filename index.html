@@ -1,340 +1,1011 @@
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>نظام حضور الطلاب QR</title>
-<script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-<style>
-:root{font-family:Arial,Tahoma,sans-serif;color:#17365d;background:#f4f6f9}
-*{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:linear-gradient(135deg,#f7fbff,#eef3f8)}
-.wrap{max-width:760px;margin:auto;padding:18px}
-.card{background:#fff;border-radius:22px;padding:20px;margin:14px 0;box-shadow:0 10px 30px rgba(0,0,0,.08)}
-h1,h2{margin-top:0} h1{text-align:center;font-size:28px}
-label{display:block;font-weight:bold;margin:12px 0 6px}
-input,select,button{width:100%;padding:14px;border-radius:12px;border:1px solid #ccd6e0;font-size:17px}
-button{background:#17365d;color:#fff;border:none;cursor:pointer;font-weight:bold;margin-top:14px}
-button.secondary{background:#6b7280}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.status{padding:14px;border-radius:14px;margin-top:12px;font-weight:bold}
-.ok{background:#e8f7ed;color:#176b35}.warn{background:#fff4dd;color:#875f00}.err{background:#fdeaea;color:#9a1d1d}
-.muted{color:#5c6b7a}.hidden{display:none!important}.last{font-size:20px}.small{font-size:13px}
-#reader{width:100%;overflow:hidden;border-radius:18px;margin-top:10px}
-@media(max-width:600px){.row{grid-template-columns:1fr}.wrap{padding:10px}.card{padding:15px}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <title>نظام حضور الطلاب QR</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+  <style>
+    :root{
+      font-family:Arial,Tahoma,sans-serif;
+      color:#17365d;
+      background:#f4f6f9
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      min-height:100vh;
+      background:linear-gradient(135deg,#f7fbff,#eef3f8)
+    }
+
+    .wrap{
+      max-width:760px;
+      margin:auto;
+      padding:18px
+    }
+
+    .card{
+      background:#fff;
+      border-radius:22px;
+      padding:20px;
+      margin:14px 0;
+      box-shadow:0 10px 30px rgba(0,0,0,.08)
+    }
+
+    h1,h2{margin-top:0}
+
+    h1{
+      text-align:center;
+      font-size:28px
+    }
+
+    label{
+      display:block;
+      font-weight:bold;
+      margin:12px 0 6px
+    }
+
+    input,select,button{
+      width:100%;
+      padding:14px;
+      border-radius:12px;
+      border:1px solid #ccd6e0;
+      font-size:17px
+    }
+
+    button{
+      background:#17365d;
+      color:#fff;
+      border:none;
+      cursor:pointer;
+      font-weight:bold;
+      margin-top:14px
+    }
+
+    button:disabled{
+      opacity:.6;
+      cursor:not-allowed
+    }
+
+    button.secondary{
+      background:#6b7280
+    }
+
+    .top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px
+    }
+
+    .small{
+      font-size:13px
+    }
+
+    .muted{
+      color:#5c6b7a
+    }
+
+    #reader{
+      width:100%;
+      overflow:hidden;
+      border-radius:18px;
+      margin-top:10px
+    }
+
+    .status{
+      padding:14px;
+      border-radius:14px;
+      margin-top:12px;
+      font-weight:bold
+    }
+
+    .ok{
+      background:#e8f7ed;
+      color:#176b35
+    }
+
+    .warn{
+      background:#fff4dd;
+      color:#875f00
+    }
+
+    .err{
+      background:#fdeaea;
+      color:#9a1d1d
+    }
+
+    .hidden{
+      display:none!important
+    }
+
+    .last{
+      font-size:20px
+    }
+
+    @media(max-width:600px){
+      .wrap{padding:10px}
+      .card{padding:15px}
+      .top{align-items:flex-start}
+    }
+  </style>
 </head>
+
 <body>
+
 <div class="wrap">
 
-<div class="card">
-<h1>نظام حضور الطلاب بالـ QR</h1>
-<div class="muted" style="text-align:center">المسح من كاميرا الموبايل → تسجيل تلقائي في Google Sheets</div>
+  <div class="card">
+    <h1>نظام حضور الطلاب بالـ QR</h1>
+
+    <div class="muted" style="text-align:center">
+      المسح من كاميرا الموبايل → تسجيل تلقائي في Google Sheets
+    </div>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="loginCard" class="card">
+
+    <h2>دخول المشرف</h2>
+
+    <label for="supervisor">اسم المشرف</label>
+
+    <select id="supervisor">
+      <option value="">جارٍ تحميل المشرفين...</option>
+    </select>
+
+    <label for="code">كلمة السر</label>
+
+    <input
+      id="code"
+      type="password"
+      inputmode="numeric"
+      autocomplete="current-password"
+      placeholder="أدخل كلمة السر"
+    >
+
+    <button id="loginBtn">
+      دخول وبدء المسح
+    </button>
+
+    <div id="loginStatus" class="status hidden"></div>
+
+  </div>
+
+
+  <!-- SCANNER -->
+  <div id="scannerCard" class="hidden">
+
+    <div class="card">
+
+      <div class="top">
+
+        <div>
+          <div class="small muted">المشرف</div>
+          <div
+            id="loggedSupervisor"
+            style="font-weight:bold;font-size:20px"
+          ></div>
+        </div>
+
+        <button
+          id="logoutBtn"
+          class="secondary"
+          style="width:auto;margin:0;padding:10px 15px"
+        >
+          خروج
+        </button>
+
+      </div>
+
+      <div style="margin-top:15px">
+
+        <div class="small muted">
+          الجلسة الحالية
+        </div>
+
+        <div
+          id="sessionInfo"
+          style="font-weight:bold;font-size:20px"
+        >
+          لا توجد جلسة
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <h2>امسح QR الطالب</h2>
+
+      <div id="reader"></div>
+
+      <div
+        id="scanStatus"
+        class="status warn"
+      >
+        وجّه الكاميرا إلى QR الموجود على كارنيه الطالب.
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="small muted">
+        آخر عملية
+      </div>
+
+      <div
+        id="lastResult"
+        class="last"
+      >
+        —
+      </div>
+
+      <div
+        id="presentCount"
+        class="small muted"
+        style="margin-top:8px"
+      ></div>
+
+    </div>
+
+  </div>
+
 </div>
 
-<div id="loginCard" class="card">
-<h2>دخول المشرف</h2>
-<label for="supervisor">اسم المشرف</label>
-<select id="supervisor">
-<option value="">جاري تحميل المشرفين...</option>
-</select>
-
-<label for="code">كلمة السر</label>
-<input id="code" type="password" inputmode="numeric" autocomplete="current-password" placeholder="أدخل كلمة السر">
-<button id="loginBtn">دخول وبدء المسح</button>
-<div id="loginStatus" class="status hidden"></div>
-</div>
-
-<div id="scannerCard" class="hidden">
-<div class="card">
-<div class="top">
-<div>
-<div class="small muted">المشرف</div>
-<div id="loggedSupervisor" style="font-weight:bold;font-size:20px"></div>
-</div>
-<button id="logoutBtn" class="secondary" style="width:auto;margin:0;padding:10px 15px">خروج</button>
-</div>
-<div style="margin-top:15px">
-<div class="small muted">الجلسة الحالية</div>
-<div id="sessionInfo" style="font-weight:bold;font-size:20px">لا توجد جلسة</div>
-</div>
-</div>
-
-<div class="card">
-<h2>امسح QR الطالب</h2>
-<div id="reader"></div>
-<div id="scanStatus" class="status warn">وجّه الكاميرا إلى QR الموجود على كارنيه الطالب.</div>
-</div>
-
-<div class="card">
-<div class="small muted">آخر عملية</div>
-<div id="lastResult" class="last">—</div>
-<div id="presentCount" class="small muted" style="margin-top:8px"></div>
-</div>
-</div>
-
-</div>
 
 <script>
-/* الرابط الحقيقي لـ Apps Script */
-const API_URL='https://script.google.com/macros/s/AKfycbxPQj65-wjluoAxGRkL4w40Uw0fKt_5fJWMTo5MrisBUwhfh-44yNk9dnkaoQcO6meP/exec';
 
-let token='';
-let scanner=null;
-let scannerRunning=false;
-let processing=false;
+const API_URL =
+'https://script.google.com/macros/s/AKfycbxPQj65-wjluoAxGRkL4w40Uw0fKt_5fJWMTo5MrisBUwhfh-44yNk9dnkaoQcO6meP/exec';
 
-const $=id=>document.getElementById(id);
+
+let token = '';
+let scanner = null;
+let scannerRunning = false;
+let processing = false;
+
+
+const $ = id => document.getElementById(id);
+
+
+/* =========================
+   UI
+========================= */
 
 function setStatus(el,text,cls){
-  el.textContent=text;
-  el.className='status '+cls;
+
+  el.textContent = text;
+  el.className = 'status ' + cls;
+
 }
 
-function jsonp(action,params={}){
+
+/* =========================
+   JSONP API
+========================= */
+
+function api(action,params={}){
+
   return new Promise((resolve,reject)=>{
-    const callback='qrCb_'+Date.now()+'_'+Math.random().toString(36).slice(2);
-    const script=document.createElement('script');
 
-    const query=new URLSearchParams();
+    const callbackName =
+      'qrCallback_' +
+      Date.now() +
+      '_' +
+      Math.floor(Math.random()*100000);
+
+    const script = document.createElement('script');
+
+    const query = new URLSearchParams();
+
     query.set('action',action);
-    query.set('callback',callback);
+    query.set('callback',callbackName);
 
-    Object.keys(params).forEach(k=>query.set(k,String(params[k])));
-
-    let finished=false;
-    const timer=setTimeout(()=>{
-      if(finished)return;
-      finished=true;
-      cleanup();
-      reject(new Error('تعذر الاتصال بخادم النظام. تأكد من نشر Apps Script كـ Web App واختيار Anyone.'));
-    },15000);
-
-    function cleanup(){
-      clearTimeout(timer);
-      delete window[callback];
-      script.remove();
-    }
-
-    window[callback]=data=>{
-      if(finished)return;
-      finished=true;
-      cleanup();
-      resolve(data);
-    };
-
-    script.onerror=()=>{
-      if(finished)return;
-      finished=true;
-      cleanup();
-      reject(new Error('تعذر الاتصال بخادم النظام.'));
-    };
-
-    script.src=API_URL+'?'+query.toString();
-    document.body.appendChild(script);
-  });
-}
-
-async function loadConfig(){
-  try{
-    const res=await jsonp('config');
-
-    if(!res.ok)throw new Error(res.message||'تعذر تحميل المشرفين.');
-
-    $('supervisor').innerHTML='<option value="">اختر المشرف</option>';
-
-    (res.supervisors||[]).forEach(name=>{
-      const op=document.createElement('option');
-      op.value=name;
-      op.textContent=name;
-      $('supervisor').appendChild(op);
+    Object.keys(params).forEach(key=>{
+      query.set(key,params[key]);
     });
 
-    if(!res.supervisors || !res.supervisors.length){
-      throw new Error('لا توجد أسماء مشرفين في شيت Supervisors.');
-    }
+    const timer = setTimeout(()=>{
 
-    if(res.session){
-      $('sessionInfo').textContent=res.session.name+' — '+res.session.level;
-    }
-  }catch(err){
-    setStatus($('loginStatus'),err.message,'err');
-    $('loginStatus').classList.remove('hidden');
-  }
-}
+      cleanup();
 
-async function login(){
-  const supervisor=$('supervisor').value;
-  const code=$('code').value.trim();
-
-  if(!supervisor||!code){
-    setStatus($('loginStatus'),'اختر اسم المشرف واكتب كلمة السر.','err');
-    $('loginStatus').classList.remove('hidden');
-    return;
-  }
-
-  $('loginBtn').disabled=true;
-  setStatus($('loginStatus'),'جاري تسجيل الدخول...','warn');
-  $('loginStatus').classList.remove('hidden');
-
-  try{
-    const res=await jsonp('login',{supervisor:supervisor,code:code});
-
-    if(!res.ok)throw new Error(res.message||'فشل تسجيل الدخول.');
-
-    token=res.token;
-    $('loggedSupervisor').textContent=res.supervisor;
-    $('loginCard').classList.add('hidden');
-    $('scannerCard').classList.remove('hidden');
-    $('loginStatus').classList.add('hidden');
-
-    updateSessionInfo(res.session);
-    await startScanner();
-
-  }catch(err){
-    setStatus($('loginStatus'),err.message,'err');
-    $('loginStatus').classList.remove('hidden');
-  }finally{
-    $('loginBtn').disabled=false;
-  }
-}
-
-function updateSessionInfo(session){
-  $('sessionInfo').textContent=session
-    ? session.name+' — '+session.level
-    : 'لا توجد جلسة مفتوحة حاليًا';
-}
-
-async function startScanner(){
-  if(scannerRunning)return;
-
-  scanner=new Html5Qrcode('reader');
-
-  const config={
-    fps:12,
-    qrbox:{width:260,height:260},
-    aspectRatio:1.0,
-    rememberLastUsedCamera:true
-  };
-
-  try{
-    await scanner.start(
-      {facingMode:{ideal:'environment'}},
-      config,
-      onScanSuccess,
-      ()=>{}
-    );
-
-    scannerRunning=true;
-    setStatus($('scanStatus'),'الكاميرا تعمل — وجّهها إلى QR الطالب.','ok');
-
-  }catch(firstErr){
-    try{
-      const cameras=await Html5Qrcode.getCameras();
-      if(!cameras||!cameras.length)throw firstErr;
-
-      await scanner.start(
-        cameras[0].id,
-        config,
-        onScanSuccess,
-        ()=>{}
+      reject(
+        new Error(
+          'انتهت مهلة الاتصال بالخادم. تأكد من نشر Apps Script كـ Web App.'
+        )
       );
 
-      scannerRunning=true;
-      setStatus($('scanStatus'),'الكاميرا تعمل — وجّهها إلى QR الطالب.','ok');
+    },15000);
 
-    }catch(err){
+
+    window[callbackName] = function(data){
+
+      clearTimeout(timer);
+
+      cleanup();
+
+      resolve(data);
+
+    };
+
+
+    function cleanup(){
+
+      try{
+        delete window[callbackName];
+      }catch(e){}
+
+      if(script.parentNode){
+        script.parentNode.removeChild(script);
+      }
+
+    }
+
+
+    script.onerror = function(){
+
+      clearTimeout(timer);
+
+      cleanup();
+
+      reject(
+        new Error(
+          'تعذر الاتصال بخادم Google Apps Script.'
+        )
+      );
+
+    };
+
+
+    script.src =
+      API_URL +
+      '?' +
+      query.toString();
+
+    document.body.appendChild(script);
+
+  });
+
+}
+
+
+/* =========================
+   LOAD CONFIG
+========================= */
+
+async function loadConfig(){
+
+  try{
+
+    const res = await api('config');
+
+    if(!res || !res.ok){
+
+      throw new Error(
+        res?.message ||
+        'تعذر تحميل إعدادات النظام.'
+      );
+
+    }
+
+
+    const select = $('supervisor');
+
+    select.innerHTML =
+      '<option value="">اختر المشرف</option>';
+
+
+    (res.supervisors || []).forEach(name=>{
+
+      const option =
+        document.createElement('option');
+
+      option.value = name;
+      option.textContent = name;
+
+      select.appendChild(option);
+
+    });
+
+
+    if(!res.supervisors || !res.supervisors.length){
+
       setStatus(
-        $('scanStatus'),
-        'تعذر تشغيل الكاميرا. افتح الرابط من HTTPS واسمح للمتصفح باستخدام الكاميرا.',
+        $('loginStatus'),
+        'لم يتم العثور على المشرفين في شيت Supervisors.',
         'err'
       );
-      console.error(err);
-    }
-  }
-}
 
-async function stopScanner(){
-  if(!scanner||!scannerRunning)return;
-  try{await scanner.stop();}catch(e){}
-  try{scanner.clear();}catch(e){}
-  scannerRunning=false;
-  scanner=null;
-}
+      $('loginStatus').classList.remove('hidden');
 
-async function onScanSuccess(decodedText){
-  if(processing)return;
-  processing=true;
-
-  setStatus($('scanStatus'),'تمت قراءة QR — جاري تسجيل الحضور...','warn');
-
-  try{
-    const res=await jsonp('scan',{token:token,qr:decodedText});
-
-    if(res.code==='AUTH_EXPIRED'){
-      throw new Error(res.message||'انتهت جلسة الدخول.');
-    }
-
-    if(res.ok&&res.code==='PRESENT'){
-      $('lastResult').textContent='✅ '+res.student.name+' — تم تسجيل الحضور';
-      $('presentCount').textContent='إجمالي الحاضرين في الجلسة: '+res.presentCount;
-      setStatus($('scanStatus'),'تم تسجيل: '+res.student.name+' — '+res.student.id,'ok');
-
-    }else if(res.code==='DUPLICATE'){
-      $('lastResult').textContent='⚠️ '+(res.student?.name||'')+' — الطالب مسجل بالفعل';
-      setStatus($('scanStatus'),'هذا الطالب مسجل بالفعل في نفس الجلسة.','warn');
-
-    }else if(res.code==='LEVEL_MISMATCH'){
-      $('lastResult').textContent='⚠️ '+(res.student?.name||'')+' — المستوى غير مطابق';
-      setStatus($('scanStatus'),res.message,'warn');
-
-    }else{
-      $('lastResult').textContent='❌ '+(res.message||'لم يتم التسجيل');
-      setStatus($('scanStatus'),res.message||'لم يتم التسجيل','err');
     }
 
   }catch(err){
-    $('lastResult').textContent='❌ '+err.message;
-    setStatus($('scanStatus'),err.message,'err');
 
-    if(err.message.includes('انتهت جلسة الدخول')){
+    console.error(err);
+
+    setStatus(
+      $('loginStatus'),
+      err.message,
+      'err'
+    );
+
+    $('loginStatus').classList.remove('hidden');
+
+  }
+
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+async function login(){
+
+  const supervisor =
+    $('supervisor').value;
+
+  const code =
+    $('code').value.trim();
+
+
+  if(!supervisor || !code){
+
+    setStatus(
+      $('loginStatus'),
+      'اختر اسم المشرف واكتب كلمة السر.',
+      'err'
+    );
+
+    $('loginStatus').classList.remove('hidden');
+
+    return;
+
+  }
+
+
+  $('loginBtn').disabled = true;
+
+
+  setStatus(
+    $('loginStatus'),
+    'جاري تسجيل الدخول...',
+    'warn'
+  );
+
+  $('loginStatus').classList.remove('hidden');
+
+
+  try{
+
+    const res = await api(
+      'login',
+      {
+        supervisor:supervisor,
+        code:code
+      }
+    );
+
+
+    if(!res || !res.ok){
+
+      throw new Error(
+        res?.message ||
+        'فشل تسجيل الدخول.'
+      );
+
+    }
+
+
+    token = res.token;
+
+
+    $('loggedSupervisor').textContent =
+      res.supervisor;
+
+
+    $('loginCard').classList.add('hidden');
+
+    $('scannerCard').classList.remove('hidden');
+
+    $('loginStatus').classList.add('hidden');
+
+
+    updateSessionInfo(res.session);
+
+
+    await startScanner();
+
+
+  }catch(err){
+
+    console.error(err);
+
+    setStatus(
+      $('loginStatus'),
+      err.message,
+      'err'
+    );
+
+    $('loginStatus').classList.remove('hidden');
+
+  }finally{
+
+    $('loginBtn').disabled = false;
+
+  }
+
+}
+
+
+/* =========================
+   SESSION
+========================= */
+
+function updateSessionInfo(session){
+
+  if(!session){
+
+    $('sessionInfo').textContent =
+      'لا توجد جلسة مفتوحة حاليًا';
+
+    return;
+
+  }
+
+
+  $('sessionInfo').textContent =
+    session.name +
+    ' — ' +
+    session.level;
+
+}
+
+
+/* =========================
+   CAMERA
+========================= */
+
+async function startScanner(){
+
+  if(scannerRunning) return;
+
+
+  scanner =
+    new Html5Qrcode('reader');
+
+
+  const config = {
+
+    fps:10,
+
+    qrbox:{
+      width:260,
+      height:260
+    },
+
+    aspectRatio:1.0,
+
+    rememberLastUsedCamera:true
+
+  };
+
+
+  try{
+
+    await scanner.start(
+
+      {
+        facingMode:{
+          ideal:'environment'
+        }
+      },
+
+      config,
+
+      onScanSuccess,
+
+      () => {}
+
+    );
+
+
+    scannerRunning = true;
+
+
+    setStatus(
+      $('scanStatus'),
+      'الكاميرا تعمل — وجّهها إلى QR الطالب.',
+      'ok'
+    );
+
+
+  }catch(firstErr){
+
+    console.error(
+      'Camera first attempt:',
+      firstErr
+    );
+
+
+    try{
+
+      const cameras =
+        await Html5Qrcode.getCameras();
+
+
+      if(!cameras || !cameras.length){
+
+        throw firstErr;
+
+      }
+
+
+      await scanner.start(
+
+        cameras[0].id,
+
+        config,
+
+        onScanSuccess,
+
+        () => {}
+
+      );
+
+
+      scannerRunning = true;
+
+
+      setStatus(
+        $('scanStatus'),
+        'الكاميرا تعمل — وجّهها إلى QR الطالب.',
+        'ok'
+      );
+
+
+    }catch(err){
+
+      console.error(
+        'Camera final error:',
+        err
+      );
+
+
+      setStatus(
+        $('scanStatus'),
+        'تعذر تشغيل الكاميرا. افتح الرابط من HTTPS واسمح للموقع باستخدام الكاميرا.',
+        'err'
+      );
+
+    }
+
+  }
+
+}
+
+
+/* =========================
+   STOP CAMERA
+========================= */
+
+async function stopScanner(){
+
+  if(!scanner || !scannerRunning){
+
+    scanner = null;
+    scannerRunning = false;
+
+    return;
+
+  }
+
+
+  try{
+
+    await scanner.stop();
+
+  }catch(e){}
+
+
+  try{
+
+    scanner.clear();
+
+  }catch(e){}
+
+
+  scanner = null;
+  scannerRunning = false;
+
+}
+
+
+/* =========================
+   SCAN
+========================= */
+
+async function onScanSuccess(decodedText){
+
+  if(processing) return;
+
+
+  processing = true;
+
+
+  setStatus(
+    $('scanStatus'),
+    'تمت قراءة QR — جاري تسجيل الحضور...',
+    'warn'
+  );
+
+
+  try{
+
+    const res = await api(
+      'scan',
+      {
+        token:token,
+        qr:decodedText
+      }
+    );
+
+
+    if(!res){
+
+      throw new Error(
+        'لم يصل رد من الخادم.'
+      );
+
+    }
+
+
+    if(res.code === 'AUTH_EXPIRED'){
+
+      throw new Error(
+        'انتهت جلسة الدخول.'
+      );
+
+    }
+
+
+    if(res.ok && res.code === 'PRESENT'){
+
+      $('lastResult').textContent =
+        '✅ ' +
+        res.student.name +
+        ' — تم تسجيل الحضور';
+
+
+      $('presentCount').textContent =
+        'إجمالي الحاضرين في الجلسة: ' +
+        res.presentCount;
+
+
+      setStatus(
+        $('scanStatus'),
+        'تم تسجيل: ' +
+        res.student.name +
+        ' — ' +
+        res.student.id,
+        'ok'
+      );
+
+
+    }else if(res.code === 'DUPLICATE'){
+
+      $('lastResult').textContent =
+        '⚠️ ' +
+        (res.student?.name || '') +
+        ' — الطالب مسجل بالفعل';
+
+
+      setStatus(
+        $('scanStatus'),
+        'هذا الطالب مسجل بالفعل في نفس الجلسة.',
+        'warn'
+      );
+
+
+    }else if(res.code === 'LEVEL_MISMATCH'){
+
+      $('lastResult').textContent =
+        '⚠️ ' +
+        (res.student?.name || '') +
+        ' — المستوى غير مطابق';
+
+
+      setStatus(
+        $('scanStatus'),
+        res.message,
+        'warn'
+      );
+
+
+    }else{
+
+      $('lastResult').textContent =
+        '❌ ' +
+        (
+          res.message ||
+          'لم يتم التسجيل'
+        );
+
+
+      setStatus(
+        $('scanStatus'),
+        res.message ||
+        'لم يتم التسجيل',
+        'err'
+      );
+
+    }
+
+
+  }catch(err){
+
+    console.error(err);
+
+
+    $('lastResult').textContent =
+      '❌ ' +
+      err.message;
+
+
+    setStatus(
+      $('scanStatus'),
+      err.message,
+      'err'
+    );
+
+
+    if(
+      err.message.includes(
+        'انتهت جلسة الدخول'
+      )
+    ){
+
       await logout();
+
       return;
+
     }
 
   }finally{
+
     setTimeout(()=>{
-      processing=false;
-      if(scannerRunning)setStatus($('scanStatus'),'جاهز لمسح الطالب التالي.','ok');
-    },1100);
+
+      processing = false;
+
+      if(scannerRunning){
+
+        setStatus(
+          $('scanStatus'),
+          'جاهز لمسح الطالب التالي.',
+          'ok'
+        );
+
+      }
+
+    },1200);
+
   }
+
 }
+
+
+/* =========================
+   LOGOUT
+========================= */
 
 async function logout(){
+
   await stopScanner();
 
+
   if(token){
-    try{await jsonp('logout',{token:token});}catch(e){}
+
+    try{
+
+      await api(
+        'logout',
+        {
+          token:token
+        }
+      );
+
+    }catch(e){}
+
   }
 
-  token='';
-  $('code').value='';
-  $('scannerCard').classList.add('hidden');
-  $('loginCard').classList.remove('hidden');
-  setStatus($('loginStatus'),'تم تسجيل الخروج.','ok');
-  $('loginStatus').classList.remove('hidden');
+
+  token = '';
+
+
+  $('code').value = '';
+
+
+  $('scannerCard')
+    .classList.add('hidden');
+
+
+  $('loginCard')
+    .classList.remove('hidden');
+
+
+  setStatus(
+    $('loginStatus'),
+    'تم تسجيل الخروج.',
+    'ok'
+  );
+
+
+  $('loginStatus')
+    .classList.remove('hidden');
+
 }
 
-$('loginBtn').addEventListener('click',login);
-$('logoutBtn').addEventListener('click',logout);
-$('code').addEventListener('keydown',e=>{
-  if(e.key==='Enter')login();
-});
 
-window.addEventListener('DOMContentLoaded',()=>{
-  loadConfig();
-});
+/* =========================
+   EVENTS
+========================= */
+
+$('loginBtn')
+  .addEventListener(
+    'click',
+    login
+  );
+
+
+$('logoutBtn')
+  .addEventListener(
+    'click',
+    logout
+  );
+
+
+$('code')
+  .addEventListener(
+    'keydown',
+    e=>{
+
+      if(e.key === 'Enter'){
+
+        login();
+
+      }
+
+    }
+  );
+
+
+/* =========================
+   START
+========================= */
+
+window.addEventListener(
+  'DOMContentLoaded',
+  function(){
+
+    loadConfig();
+
+  }
+);
+
 </script>
+
 </body>
 </html>
+```
