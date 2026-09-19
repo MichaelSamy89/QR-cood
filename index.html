@@ -1,140 +1,151 @@
-```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-  <title>نظام حضور الطلاب QR</title>
+<title>نظام حضور الطلاب QR</title>
 
-  <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
-  <style>
-    :root{
-      font-family:Arial,Tahoma,sans-serif;
-      color:#17365d;
-      background:#f4f6f9
-    }
+<style>
+:root{
+  font-family:Arial,Tahoma,sans-serif;
+  color:#17365d;
+  background:#f4f6f9;
+}
 
-    *{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
-    body{
-      margin:0;
-      min-height:100vh;
-      background:linear-gradient(135deg,#f7fbff,#eef3f8)
-    }
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(135deg,#f7fbff,#eef3f8);
+}
 
-    .wrap{
-      max-width:760px;
-      margin:auto;
-      padding:18px
-    }
+.wrap{
+  max-width:760px;
+  margin:auto;
+  padding:18px;
+}
 
-    .card{
-      background:#fff;
-      border-radius:22px;
-      padding:20px;
-      margin:14px 0;
-      box-shadow:0 10px 30px rgba(0,0,0,.08)
-    }
+.card{
+  background:#fff;
+  border-radius:22px;
+  padding:20px;
+  margin:14px 0;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
 
-    h1,h2{margin-top:0}
+h1,h2{
+  margin-top:0;
+}
 
-    h1{
-      text-align:center;
-      font-size:28px
-    }
+h1{
+  text-align:center;
+  font-size:28px;
+}
 
-    label{
-      display:block;
-      font-weight:bold;
-      margin:12px 0 6px
-    }
+label{
+  display:block;
+  font-weight:bold;
+  margin:12px 0 6px;
+}
 
-    input,select,button{
-      width:100%;
-      padding:14px;
-      border-radius:12px;
-      border:1px solid #ccd6e0;
-      font-size:17px
-    }
+input,select,button{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid #ccd6e0;
+  font-size:17px;
+}
 
-    button{
-      background:#17365d;
-      color:#fff;
-      border:none;
-      cursor:pointer;
-      font-weight:bold;
-      margin-top:14px
-    }
+button{
+  background:#17365d;
+  color:#fff;
+  border:none;
+  cursor:pointer;
+  font-weight:bold;
+  margin-top:14px;
+}
 
-    button:disabled{
-      opacity:.6;
-      cursor:not-allowed
-    }
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
 
-    button.secondary{
-      background:#6b7280
-    }
+button.secondary{
+  background:#6b7280;
+}
 
-    .top{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px
-    }
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
 
-    .small{
-      font-size:13px
-    }
+.small{
+  font-size:13px;
+}
 
-    .muted{
-      color:#5c6b7a
-    }
+.muted{
+  color:#5c6b7a;
+}
 
-    #reader{
-      width:100%;
-      overflow:hidden;
-      border-radius:18px;
-      margin-top:10px
-    }
+#reader{
+  width:100%;
+  overflow:hidden;
+  border-radius:18px;
+  margin-top:10px;
+}
 
-    .status{
-      padding:14px;
-      border-radius:14px;
-      margin-top:12px;
-      font-weight:bold
-    }
+.status{
+  padding:14px;
+  border-radius:14px;
+  margin-top:12px;
+  font-weight:bold;
+}
 
-    .ok{
-      background:#e8f7ed;
-      color:#176b35
-    }
+.ok{
+  background:#e8f7ed;
+  color:#176b35;
+}
 
-    .warn{
-      background:#fff4dd;
-      color:#875f00
-    }
+.warn{
+  background:#fff4dd;
+  color:#875f00;
+}
 
-    .err{
-      background:#fdeaea;
-      color:#9a1d1d
-    }
+.err{
+  background:#fdeaea;
+  color:#9a1d1d;
+}
 
-    .hidden{
-      display:none!important
-    }
+.hidden{
+  display:none!important;
+}
 
-    .last{
-      font-size:20px
-    }
+.last{
+  font-size:20px;
+}
 
-    @media(max-width:600px){
-      .wrap{padding:10px}
-      .card{padding:15px}
-      .top{align-items:flex-start}
-    }
-  </style>
+@media(max-width:600px){
+  .wrap{
+    padding:10px;
+  }
+
+  .card{
+    padding:15px;
+  }
+
+  .top{
+    align-items:flex-start;
+  }
+}
+</style>
 </head>
 
 <body>
@@ -142,25 +153,38 @@
 <div class="wrap">
 
   <div class="card">
+
     <h1>نظام حضور الطلاب بالـ QR</h1>
 
     <div class="muted" style="text-align:center">
       المسح من كاميرا الموبايل → تسجيل تلقائي في Google Sheets
     </div>
+
   </div>
 
+
   <!-- LOGIN -->
+
   <div id="loginCard" class="card">
 
     <h2>دخول المشرف</h2>
 
-    <label for="supervisor">اسم المشرف</label>
+    <label for="supervisor">
+      اسم المشرف
+    </label>
 
     <select id="supervisor">
-      <option value="">جارٍ تحميل المشرفين...</option>
+
+      <option value="">
+        جارٍ تحميل المشرفين...
+      </option>
+
     </select>
 
-    <label for="code">كلمة السر</label>
+
+    <label for="code">
+      كلمة السر
+    </label>
 
     <input
       id="code"
@@ -170,29 +194,44 @@
       placeholder="أدخل كلمة السر"
     >
 
+
     <button id="loginBtn">
       دخول وبدء المسح
     </button>
 
-    <div id="loginStatus" class="status hidden"></div>
+
+    <div
+      id="loginStatus"
+      class="status hidden"
+    ></div>
 
   </div>
 
 
   <!-- SCANNER -->
-  <div id="scannerCard" class="hidden">
+
+  <div
+    id="scannerCard"
+    class="hidden"
+  >
 
     <div class="card">
 
       <div class="top">
 
         <div>
-          <div class="small muted">المشرف</div>
+
+          <div class="small muted">
+            المشرف
+          </div>
+
           <div
             id="loggedSupervisor"
             style="font-weight:bold;font-size:20px"
           ></div>
+
         </div>
+
 
         <button
           id="logoutBtn"
@@ -203,6 +242,7 @@
         </button>
 
       </div>
+
 
       <div style="margin-top:15px">
 
@@ -224,7 +264,9 @@
 
     <div class="card">
 
-      <h2>امسح QR الطالب</h2>
+      <h2>
+        امسح QR الطالب
+      </h2>
 
       <div id="reader"></div>
 
@@ -266,6 +308,10 @@
 
 <script>
 
+/* ==================================================
+   GOOGLE APPS SCRIPT
+================================================== */
+
 const API_URL =
 'https://script.google.com/macros/s/AKfycbxPQj65-wjluoAxGRkL4w40Uw0fKt_5fJWMTo5MrisBUwhfh-44yNk9dnkaoQcO6meP/exec';
 
@@ -279,21 +325,24 @@ let processing = false;
 const $ = id => document.getElementById(id);
 
 
-/* =========================
-   UI
-========================= */
+/* ==================================================
+   STATUS
+================================================== */
 
 function setStatus(el,text,cls){
 
-  el.textContent = text;
-  el.className = 'status ' + cls;
+  if(!el) return;
 
+  el.textContent = text;
+
+  el.className =
+    'status ' + cls;
 }
 
 
-/* =========================
-   JSONP API
-========================= */
+/* ==================================================
+   JSONP
+================================================== */
 
 function api(action,params={}){
 
@@ -303,33 +352,36 @@ function api(action,params={}){
       'qrCallback_' +
       Date.now() +
       '_' +
-      Math.floor(Math.random()*100000);
-
-    const script = document.createElement('script');
-
-    const query = new URLSearchParams();
-
-    query.set('action',action);
-    query.set('callback',callbackName);
-
-    Object.keys(params).forEach(key=>{
-      query.set(key,params[key]);
-    });
-
-    const timer = setTimeout(()=>{
-
-      cleanup();
-
-      reject(
-        new Error(
-          'انتهت مهلة الاتصال بالخادم. تأكد من نشر Apps Script كـ Web App.'
-        )
-      );
-
-    },15000);
+      Math.floor(Math.random()*1000000);
 
 
-    window[callbackName] = function(data){
+    const script =
+      document.createElement('script');
+
+
+    let finished = false;
+
+
+    function cleanup(){
+
+      if(script.parentNode){
+        script.parentNode.removeChild(script);
+      }
+
+      try{
+        delete window[callbackName];
+      }catch(e){
+        window[callbackName] = undefined;
+      }
+
+    }
+
+
+    function finishSuccess(data){
+
+      if(finished) return;
+
+      finished = true;
 
       clearTimeout(timer);
 
@@ -337,41 +389,100 @@ function api(action,params={}){
 
       resolve(data);
 
-    };
-
-
-    function cleanup(){
-
-      try{
-        delete window[callbackName];
-      }catch(e){}
-
-      if(script.parentNode){
-        script.parentNode.removeChild(script);
-      }
-
     }
 
 
-    script.onerror = function(){
+    function finishError(message){
+
+      if(finished) return;
+
+      finished = true;
 
       clearTimeout(timer);
 
       cleanup();
 
       reject(
-        new Error(
-          'تعذر الاتصال بخادم Google Apps Script.'
-        )
+        new Error(message)
       );
 
-    };
+    }
+
+
+    window[callbackName] =
+      function(data){
+
+        finishSuccess(data);
+
+      };
+
+
+    script.onerror =
+      function(){
+
+        finishError(
+          'تعذر الاتصال بخادم Google Apps Script.'
+        );
+
+      };
+
+
+    const query =
+      new URLSearchParams();
+
+
+    query.set(
+      'action',
+      String(action)
+    );
+
+
+    query.set(
+      'callback',
+      callbackName
+    );
+
+
+    Object.keys(params).forEach(
+      function(key){
+
+        const value =
+          params[key];
+
+        if(
+          value !== undefined &&
+          value !== null
+        ){
+
+          query.set(
+            key,
+            String(value)
+          );
+
+        }
+
+      }
+    );
+
+
+    const timer =
+      setTimeout(
+        function(){
+
+          finishError(
+            'انتهت مهلة الاتصال بخادم Google Apps Script.'
+          );
+
+        },
+        20000
+      );
 
 
     script.src =
       API_URL +
       '?' +
       query.toString();
+
 
     document.body.appendChild(script);
 
@@ -380,17 +491,39 @@ function api(action,params={}){
 }
 
 
-/* =========================
+/* ==================================================
    LOAD CONFIG
-========================= */
+================================================== */
 
 async function loadConfig(){
 
+  setStatus(
+    $('loginStatus'),
+    'جاري الاتصال بخادم Google Apps Script...',
+    'warn'
+  );
+
+  $('loginStatus')
+    .classList
+    .remove('hidden');
+
+
   try{
 
-    const res = await api('config');
+    const res =
+      await api('config');
 
-    if(!res || !res.ok){
+
+    console.log(
+      'CONFIG RESPONSE:',
+      res
+    );
+
+
+    if(
+      !res ||
+      !res.ok
+    ){
 
       throw new Error(
         res?.message ||
@@ -400,26 +533,51 @@ async function loadConfig(){
     }
 
 
-    const select = $('supervisor');
+    const select =
+      $('supervisor');
+
 
     select.innerHTML =
       '<option value="">اختر المشرف</option>';
 
 
-    (res.supervisors || []).forEach(name=>{
-
-      const option =
-        document.createElement('option');
-
-      option.value = name;
-      option.textContent = name;
-
-      select.appendChild(option);
-
-    });
+    const supervisors =
+      res.supervisors || [];
 
 
-    if(!res.supervisors || !res.supervisors.length){
+    supervisors.forEach(
+      function(item){
+
+        const name =
+          typeof item === 'string'
+            ? item
+            : item.name;
+
+
+        if(!name) return;
+
+
+        const option =
+          document.createElement('option');
+
+
+        option.value =
+          name;
+
+
+        option.textContent =
+          name;
+
+
+        select.appendChild(
+          option
+        );
+
+      }
+    );
+
+
+    if(!supervisors.length){
 
       setStatus(
         $('loginStatus'),
@@ -427,41 +585,56 @@ async function loadConfig(){
         'err'
       );
 
-      $('loginStatus').classList.remove('hidden');
+      return;
 
     }
 
-  }catch(err){
-
-    console.error(err);
 
     setStatus(
       $('loginStatus'),
-      err.message,
-      'err'
+      'تم الاتصال بالخادم. اختر المشرف وسجل الدخول.',
+      'ok'
     );
 
-    $('loginStatus').classList.remove('hidden');
+
+  }catch(err){
+
+    console.error(
+      'CONFIG ERROR:',
+      err
+    );
+
+
+    setStatus(
+      $('loginStatus'),
+      err.message ||
+      'تعذر الاتصال بخادم Google Apps Script.',
+      'err'
+    );
 
   }
 
 }
 
 
-/* =========================
+/* ==================================================
    LOGIN
-========================= */
+================================================== */
 
 async function login(){
 
   const supervisor =
     $('supervisor').value;
 
+
   const code =
     $('code').value.trim();
 
 
-  if(!supervisor || !code){
+  if(
+    !supervisor ||
+    !code
+  ){
 
     setStatus(
       $('loginStatus'),
@@ -469,14 +642,17 @@ async function login(){
       'err'
     );
 
-    $('loginStatus').classList.remove('hidden');
+    $('loginStatus')
+      .classList
+      .remove('hidden');
 
     return;
 
   }
 
 
-  $('loginBtn').disabled = true;
+  $('loginBtn').disabled =
+    true;
 
 
   setStatus(
@@ -485,21 +661,34 @@ async function login(){
     'warn'
   );
 
-  $('loginStatus').classList.remove('hidden');
+
+  $('loginStatus')
+    .classList
+    .remove('hidden');
 
 
   try{
 
-    const res = await api(
-      'login',
-      {
-        supervisor:supervisor,
-        code:code
-      }
+    const res =
+      await api(
+        'login',
+        {
+          supervisor:supervisor,
+          code:code
+        }
+      );
+
+
+    console.log(
+      'LOGIN RESPONSE:',
+      res
     );
 
 
-    if(!res || !res.ok){
+    if(
+      !res ||
+      !res.ok
+    ){
 
       throw new Error(
         res?.message ||
@@ -509,21 +698,34 @@ async function login(){
     }
 
 
-    token = res.token;
+    token =
+      res.token;
 
 
-    $('loggedSupervisor').textContent =
-      res.supervisor;
+    $('loggedSupervisor')
+      .textContent =
+      res.supervisor ||
+      supervisor;
 
 
-    $('loginCard').classList.add('hidden');
-
-    $('scannerCard').classList.remove('hidden');
-
-    $('loginStatus').classList.add('hidden');
+    $('loginCard')
+      .classList
+      .add('hidden');
 
 
-    updateSessionInfo(res.session);
+    $('scannerCard')
+      .classList
+      .remove('hidden');
+
+
+    $('loginStatus')
+      .classList
+      .add('hidden');
+
+
+    updateSessionInfo(
+      res.session
+    );
 
 
     await startScanner();
@@ -531,34 +733,45 @@ async function login(){
 
   }catch(err){
 
-    console.error(err);
+    console.error(
+      'LOGIN ERROR:',
+      err
+    );
+
 
     setStatus(
       $('loginStatus'),
-      err.message,
+      err.message ||
+      'فشل تسجيل الدخول.',
       'err'
     );
 
-    $('loginStatus').classList.remove('hidden');
+
+    $('loginStatus')
+      .classList
+      .remove('hidden');
+
 
   }finally{
 
-    $('loginBtn').disabled = false;
+    $('loginBtn').disabled =
+      false;
 
   }
 
 }
 
 
-/* =========================
+/* ==================================================
    SESSION
-========================= */
+================================================== */
 
 function updateSessionInfo(session){
 
   if(!session){
 
-    $('sessionInfo').textContent =
+    $('sessionInfo')
+      .textContent =
       'لا توجد جلسة مفتوحة حاليًا';
 
     return;
@@ -566,7 +779,8 @@ function updateSessionInfo(session){
   }
 
 
-  $('sessionInfo').textContent =
+  $('sessionInfo')
+    .textContent =
     session.name +
     ' — ' +
     session.level;
@@ -574,17 +788,32 @@ function updateSessionInfo(session){
 }
 
 
-/* =========================
+/* ==================================================
    CAMERA
-========================= */
+================================================== */
 
 async function startScanner(){
 
-  if(scannerRunning) return;
+  if(scannerRunning){
+    return;
+  }
+
+
+  if(scanner){
+
+    try{
+      await scanner.clear();
+    }catch(e){}
+
+    scanner = null;
+
+  }
 
 
   scanner =
-    new Html5Qrcode('reader');
+    new Html5Qrcode(
+      'reader'
+    );
 
 
   const config = {
@@ -617,12 +846,13 @@ async function startScanner(){
 
       onScanSuccess,
 
-      () => {}
+      function(){}
 
     );
 
 
-    scannerRunning = true;
+    scannerRunning =
+      true;
 
 
     setStatus(
@@ -646,7 +876,10 @@ async function startScanner(){
         await Html5Qrcode.getCameras();
 
 
-      if(!cameras || !cameras.length){
+      if(
+        !cameras ||
+        !cameras.length
+      ){
 
         throw firstErr;
 
@@ -661,12 +894,13 @@ async function startScanner(){
 
         onScanSuccess,
 
-        () => {}
+        function(){}
 
       );
 
 
-      scannerRunning = true;
+      scannerRunning =
+        true;
 
 
       setStatus(
@@ -686,7 +920,7 @@ async function startScanner(){
 
       setStatus(
         $('scanStatus'),
-        'تعذر تشغيل الكاميرا. افتح الرابط من HTTPS واسمح للموقع باستخدام الكاميرا.',
+        'تعذر تشغيل الكاميرا. افتح الموقع من HTTPS واسمح باستخدام الكاميرا.',
         'err'
       );
 
@@ -697,16 +931,21 @@ async function startScanner(){
 }
 
 
-/* =========================
+/* ==================================================
    STOP CAMERA
-========================= */
+================================================== */
 
 async function stopScanner(){
 
-  if(!scanner || !scannerRunning){
+  if(
+    !scanner ||
+    !scannerRunning
+  ){
 
     scanner = null;
-    scannerRunning = false;
+
+    scannerRunning =
+      false;
 
     return;
 
@@ -728,21 +967,39 @@ async function stopScanner(){
 
 
   scanner = null;
-  scannerRunning = false;
+
+  scannerRunning =
+    false;
 
 }
 
 
-/* =========================
+/* ==================================================
    SCAN
-========================= */
+================================================== */
 
 async function onScanSuccess(decodedText){
 
-  if(processing) return;
+  if(processing){
+    return;
+  }
 
 
-  processing = true;
+  if(!token){
+
+    setStatus(
+      $('scanStatus'),
+      'جلسة الدخول غير موجودة. سجل الدخول مرة أخرى.',
+      'err'
+    );
+
+    return;
+
+  }
+
+
+  processing =
+    true;
 
 
   setStatus(
@@ -754,12 +1011,19 @@ async function onScanSuccess(decodedText){
 
   try{
 
-    const res = await api(
-      'scan',
-      {
-        token:token,
-        qr:decodedText
-      }
+    const res =
+      await api(
+        'scan',
+        {
+          token:token,
+          qr:decodedText
+        }
+      );
+
+
+    console.log(
+      'SCAN RESPONSE:',
+      res
     );
 
 
@@ -772,7 +1036,10 @@ async function onScanSuccess(decodedText){
     }
 
 
-    if(res.code === 'AUTH_EXPIRED'){
+    if(
+      res.code ===
+      'AUTH_EXPIRED'
+    ){
 
       throw new Error(
         'انتهت جلسة الدخول.'
@@ -781,15 +1048,20 @@ async function onScanSuccess(decodedText){
     }
 
 
-    if(res.ok && res.code === 'PRESENT'){
+    if(
+      res.ok &&
+      res.code === 'PRESENT'
+    ){
 
-      $('lastResult').textContent =
+      $('lastResult')
+        .textContent =
         '✅ ' +
         res.student.name +
         ' — تم تسجيل الحضور';
 
 
-      $('presentCount').textContent =
+      $('presentCount')
+        .textContent =
         'إجمالي الحاضرين في الجلسة: ' +
         res.presentCount;
 
@@ -804,9 +1076,13 @@ async function onScanSuccess(decodedText){
       );
 
 
-    }else if(res.code === 'DUPLICATE'){
+    }else if(
+      res.code ===
+      'DUPLICATE'
+    ){
 
-      $('lastResult').textContent =
+      $('lastResult')
+        .textContent =
         '⚠️ ' +
         (res.student?.name || '') +
         ' — الطالب مسجل بالفعل';
@@ -819,9 +1095,13 @@ async function onScanSuccess(decodedText){
       );
 
 
-    }else if(res.code === 'LEVEL_MISMATCH'){
+    }else if(
+      res.code ===
+      'LEVEL_MISMATCH'
+    ){
 
-      $('lastResult').textContent =
+      $('lastResult')
+        .textContent =
         '⚠️ ' +
         (res.student?.name || '') +
         ' — المستوى غير مطابق';
@@ -829,14 +1109,16 @@ async function onScanSuccess(decodedText){
 
       setStatus(
         $('scanStatus'),
-        res.message,
+        res.message ||
+        'المستوى غير مطابق.',
         'warn'
       );
 
 
     }else{
 
-      $('lastResult').textContent =
+      $('lastResult')
+        .textContent =
         '❌ ' +
         (
           res.message ||
@@ -856,22 +1138,31 @@ async function onScanSuccess(decodedText){
 
   }catch(err){
 
-    console.error(err);
+    console.error(
+      'SCAN ERROR:',
+      err
+    );
 
 
-    $('lastResult').textContent =
+    $('lastResult')
+      .textContent =
       '❌ ' +
-      err.message;
+      (
+        err.message ||
+        'حدث خطأ'
+      );
 
 
     setStatus(
       $('scanStatus'),
-      err.message,
+      err.message ||
+      'حدث خطأ أثناء تسجيل الحضور.',
       'err'
     );
 
 
     if(
+      err.message &&
       err.message.includes(
         'انتهت جلسة الدخول'
       )
@@ -885,30 +1176,35 @@ async function onScanSuccess(decodedText){
 
   }finally{
 
-    setTimeout(()=>{
+    setTimeout(
+      function(){
 
-      processing = false;
+        processing =
+          false;
 
-      if(scannerRunning){
 
-        setStatus(
-          $('scanStatus'),
-          'جاهز لمسح الطالب التالي.',
-          'ok'
-        );
+        if(scannerRunning){
 
-      }
+          setStatus(
+            $('scanStatus'),
+            'جاهز لمسح الطالب التالي.',
+            'ok'
+          );
 
-    },1200);
+        }
+
+      },
+      1200
+    );
 
   }
 
 }
 
 
-/* =========================
+/* ==================================================
    LOGOUT
-========================= */
+================================================== */
 
 async function logout(){
 
@@ -926,7 +1222,14 @@ async function logout(){
         }
       );
 
-    }catch(e){}
+    }catch(e){
+
+      console.error(
+        'LOGOUT ERROR:',
+        e
+      );
+
+    }
 
   }
 
@@ -938,11 +1241,13 @@ async function logout(){
 
 
   $('scannerCard')
-    .classList.add('hidden');
+    .classList
+    .add('hidden');
 
 
   $('loginCard')
-    .classList.remove('hidden');
+    .classList
+    .remove('hidden');
 
 
   setStatus(
@@ -953,14 +1258,15 @@ async function logout(){
 
 
   $('loginStatus')
-    .classList.remove('hidden');
+    .classList
+    .remove('hidden');
 
 }
 
 
-/* =========================
+/* ==================================================
    EVENTS
-========================= */
+================================================== */
 
 $('loginBtn')
   .addEventListener(
@@ -979,9 +1285,11 @@ $('logoutBtn')
 $('code')
   .addEventListener(
     'keydown',
-    e=>{
+    function(e){
 
-      if(e.key === 'Enter'){
+      if(
+        e.key === 'Enter'
+      ){
 
         login();
 
@@ -991,9 +1299,9 @@ $('code')
   );
 
 
-/* =========================
+/* ==================================================
    START
-========================= */
+================================================== */
 
 window.addEventListener(
   'DOMContentLoaded',
@@ -1008,4 +1316,3 @@ window.addEventListener(
 
 </body>
 </html>
-```
